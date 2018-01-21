@@ -68,13 +68,13 @@ public class ExpressionEvaluatorGui {
       public void actionPerformed(ActionEvent e) {
         String expression = expressionTextArea.getText();
         if (expression.isEmpty() || expression == null) {
-         showMessageDialog(frame, "Please enter a valid infix expression");
+         showMessageDialog(frame, "Please enter a valid infix expression.");
         }
         try {
         ExpressionEvaluator evaluator = new ExpressionEvaluator(expression);
         resultTextArea.setText(evaluator.solveExpression().toString());
       } catch (StackException | NumberFormatException | DivideByZeroException ex) {
-        showMessageDialog(frame, "The expression was not formatted properly.");
+        showMessageDialog(frame, "The expression was not formatted properly. Error message is: " + ex.getMessage());
         }
       }
     });

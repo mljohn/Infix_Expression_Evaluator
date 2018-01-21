@@ -43,6 +43,7 @@ public class ExpressionEvaluator {
   public Integer solveExpression() throws NumberFormatException, StackException, DivideByZeroException {
     operandStack = new ArrayStack<>();
     operatorStack = new ArrayStack<>();
+    
     for (String element : tokenizedExpression) {
       if (isAnInteger(element)) {
         operandStack.push(Integer.parseInt(element));
@@ -62,12 +63,14 @@ public class ExpressionEvaluator {
         operatorStack.push(element);
       }
     }
-    
     while (!operatorStack.isEmpty()) {
       doMath();
     }
-
-    return operandStack.peek();
+    int value = operandStack.pop();
+    if (!operandStack.isEmpty()) {
+      throw new StackException("Not all operands were used.");
+    }
+    return value;
   }
 
   /**
@@ -111,6 +114,7 @@ public class ExpressionEvaluator {
     int operand2 = operandStack.pop();
     int operand1 = operandStack.pop();
     String operator = operatorStack.pop();
+    
     switch (operator) {
       case "+":
         operandStack.push(operand1 + operand2);
@@ -127,9 +131,8 @@ public class ExpressionEvaluator {
         }
         operandStack.push(operand1 / operand2);
         break;
-      case "(":
-        operatorStack.pop();
-        break;
+      default:
+        throw new StackException("Unknown operator encountered");
     }
     
   }
